@@ -8,11 +8,7 @@ export const addCategory = async (token, value) => {
     })
 }
 
-export const getAllCategories = async (token) => {
-    return await axios.get('http://localhost:8080/category/all-categories', {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const getAllCategories = async () => {
+    return await axios.get('http://localhost:8080/category/all-categories')
 }
 

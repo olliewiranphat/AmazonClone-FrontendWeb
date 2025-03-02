@@ -18,6 +18,10 @@ function UserAccount({ checkRole }) {
     ///// CLERK :
     const { user } = useUser()
     console.log('user', user);
+
+
+    // console.log(user?.firstName);
+
     // console.log('user', user.publicMetadata.role);
     const { getToken } = useAuth()
 
@@ -51,12 +55,11 @@ function UserAccount({ checkRole }) {
                 return renderAlert(`Please fill ${key[0].toUpperCase() + key.slice(1)}`, "error")
             }
         }
-
         //// send new user data into Server for setup in database
         const token = await getToken()
-        console.log('token', token);
+        // console.log('token', token);
         // console.log('input', input);
-        try {
+        try {               ///// Work when Submit Form
             const response = await actionUpdateProflie(token, input) //at UserStore: function Update/Create New User in DB
             // console.log('response', response);
             renderAlert("Update Seccuss", "success")
@@ -69,10 +72,10 @@ function UserAccount({ checkRole }) {
 
 
     return (
-        <div className='w-full p-4 '>
+        <div className='w-full p-4 flex-wrap '>
             <span className='account font-bold text-[18px] pl-4'>Your Account</span>
             {/* Detail */}
-            <div className='flex mt-5 mb-4 mx-auto w-[75%]'>
+            <div className='flex mt-7 mb-4 mx-auto w-[75%]'>
                 <form className='flex-1 flex flex-col gap-2 ' onSubmit={hdlSubmitForm}>
                     <span className='account text-2xl font-bold'>My Profile</span>
                     <span className='account text-sm text-gray-500'>Manage and protect your account</span>
@@ -128,15 +131,18 @@ function UserAccount({ checkRole }) {
                             </div>
                         </label>
                     </div>
-                    <select onChange={hdlOnChange} name="role" value={input.role}>
-                        <option>CUSTOMER</option>
-                        <option>SELLER</option>
-                    </select>
-                    {/* <button className={`mx - auto px - 4 py - 2 my - 3 rounded - sm cursor - pointer text - white ${ notSave ? "bg-[#44484d] text-red-500" : "bg-[#0a1421] hover:bg-[#febd69] hover:text-black hover:duration-300" } `} disabled={notSave}>Save</button> */}
-                    <button className='mx-auto px-4 py-2 my-3 rounded-sm bg-[#0a1421] text-white hover:bg-[#febd69] hover:text-black hover:duration-300'>Save</button>
+                    {
+                        user?.publicMetadata.role !== "ADMIN" && (<select onChange={hdlOnChange} name="role" value={input.role} className='px-2 py-1 rounded-md'>
+                            <option>CUSTOMER</option>
+                            <option>SELLER</option>
+                        </select>)
+                    }
+                    <button className='mx-auto mt-8 px-4 py-2 my-3 rounded-sm transform transition hover:scale-125 bg-[#0a1421] text-white hover:bg-[#febd69] hover:text-black hover:duration-300'>Save</button>
                 </form>
             </div>
-
+            <div className='flex items-center justify-end pr-28 mb-8 mt-[-25px]'>
+                <button className='text-sm bg-[#949494] p-2 px-3 hover:bg-[#bbbcbc] hover:duration-300 hover:text-red-600 hover:font-bold rounded-sm'>Delete Account</button>
+            </div>
         </div>
 
     )

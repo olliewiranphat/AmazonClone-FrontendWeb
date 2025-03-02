@@ -11,7 +11,7 @@ function OrderHisBtn() {
             <SignInButton mode='modal' forceRedirectUrl='/user/order-history'>
                 <div className='rounded-sm hover:bg-slate-400  hover:text-black hover:duration-300 p-2' >
                     <button className='flex flex-col justify-center'>
-                        <span className='text-[9px]'>Returns</span>
+                        <span className='account text-[9px]'>Returns</span>
                         <span className='text-[12px] font-bold'>& Orders</span>
                     </button>
                 </div >
@@ -24,11 +24,12 @@ function OrderHisBtn() {
     return (
         <div className='rounded-sm hover:bg-slate-400  hover:text-black hover:duration-300 p-2' >
             <Link to='/user/order-history' className='flex flex-col justify-center'>
-                <span className='text-[9px]'>Returns</span>
+                <span className='account text-[9px]'>Returns</span>
                 <span className='text-[12px] font-bold'>& Orders</span>
             </Link>
         </div >
     )
+
 }
 
 export default OrderHisBtn

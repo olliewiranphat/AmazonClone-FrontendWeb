@@ -38,7 +38,7 @@ function Footer() {
                 <Link to='/about-centric'>About Centric</Link>
                 <Link to='/investor'>Investor Relations</Link>
                 <Link to='/devices'>Centric Devices</Link>
-                <Link to='/science'>Centric Science</Link>
+                <Link to='/admin/management'>Centric Staff</Link>
             </div>
         </div>
     )

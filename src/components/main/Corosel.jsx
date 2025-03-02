@@ -6,7 +6,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import CardCorosel from '../home/CardCorosel';
 
 function Corosel() {
     return (
@@ -20,7 +19,7 @@ function Corosel() {
                 spaceBetween={50}
                 slidesPerView={1}
                 onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper)}
+            // onSwiper={(swiper) => console.log(swiper)}
             >
                 <SwiperSlide>
                     <div className='bg-gradient-to-b from-[#f7b047] to-white h-[400px] relative flex justify-center'>

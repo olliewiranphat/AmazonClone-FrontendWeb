@@ -1,45 +1,32 @@
 import { Loader, Pencil } from 'lucide-react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
-import { getAllCategories } from '../../../api/category'
 import { useForm } from 'react-hook-form'
 import { resizeFile } from '../../../utils/resizer'
 import { addImages } from '../../../api/images'
 import axios from 'axios'
 import { renderAlert } from '../../../utils/renderAlert'
+import useCategoryStore from '../../../store/CategoryStore'
 
 
 function AddProduct() {
+    const allCategories = useCategoryStore(state => state.allCategories)
+    const renderAllCategories = allCategories.map(el => {
+        return (<option value={el.categoryID} key={el.categoryID}>{el.name}</option>)
+    })
+
     const [checkValue, setCheckVaule] = useState(false)
 
     const [imageData, setImageData] = useState([])
     const [loading, setLoading] = useState(false)
     const usePencil = useRef()
     const [showImage, setShowImage] = useState(false)
-    const [allCategories, setAllCategories] = useState([])
+
 
     const { getToken } = useAuth()
 
     const { register, handleSubmit, reset } = useForm()
 
-
-    const getAllCategorie = async () => {
-        const token = await getToken()
-        // console.log('token', token);
-
-        const response = await getAllCategories(token)
-        console.log('response', response.data.results);
-        setAllCategories(response.data.results)
-    }
-
-    useEffect(() => {
-        getAllCategorie()
-    }, [])
-    // console.log('AllCategories', allCategories);
-
-    const renderAllCategories = allCategories.map(el => {
-        return (<option value={el.categoryID} key={el.categoryID}>{el.name}</option>)
-    })
 
     const hdlAddImage = async (e) => {
         const token = await getToken()
@@ -96,7 +83,7 @@ function AddProduct() {
             console.log(token);
             console.log('value >>>>>', value);
             console.log('imageData >>>>>', imageData);
-            const response = await axios.post('http://localhost:8080/seller-center/add-product', { value, imageData }, {
+            const response = await axios.post('http://localhost:8080/seller-center/products/add-product', { value, imageData }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             console.log('res.ADDProduct', response);
@@ -126,7 +113,7 @@ function AddProduct() {
     }
 
     const renderImg = imageData.map((el, inx) => {
-        return (<div key={inx} className="relative w-[150px] h-[150px] bg-slate-500">
+        return (<div key={inx} className="relative w-[150px] h-[150px]">
             <img src={el.secure_url} className='w-full h-full object-cover' />
             <button onClick={() => hdlDeleteImg(el.public_id)} className='bg-[#a4a5a5] hover:bg-[#dddddd] hover:duration-300 hover:text-red-500 rounded-full w-7 h-7 flex items-center justify-center absolute right-[-10px] top-[-10px] text-xl text-white'>x</button>
         </div>)

@@ -7,7 +7,7 @@ import useAuthStore from '../../store/UserStore';
 import UserPicSB from './UserPicSB';
 
 function UserSideBar() {
-    const role = useAuthStore((state) => state.userData.role)
+    const role = useAuthStore((state) => state.userData?.role)
     console.log('role', role);
 
     const { user } = useUser()
@@ -52,8 +52,6 @@ function UserSideBar() {
                 {
                     role == "SELLER" && <SellerAccess />
                 }
-
-                {/* Show ADMIN Access  */}
                 {
                     role == "ADMIN" && <AdminAccess />
                 }

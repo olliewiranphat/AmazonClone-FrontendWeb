@@ -7,3 +7,12 @@ export const updateProfile = async (token, input) => {
         }
     })
 }
+
+
+export const deleteUserAccount = async (token) => {
+    return await axios.delete('http://localhost:8080/user/delete-account', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}

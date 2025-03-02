@@ -6,19 +6,8 @@ import ListSignout from './ListSignout'
 import axios from 'axios'
 
 function SigninSignout() {
+    const { user } = useUser()
 
-    // const email = user?.emailAddresses[0]?.emailAddress
-    // console.log(email);
-
-    const [helloUser, setHelloUser] = useState("Welcome")
-
-
-    // console.log('userID', user.id); AUTO_INCREMENT in DBs
-    // console.log('firstName', user.firstName);
-    // console.log('lastName', user.lastName);
-    // console.log('emailAddresses', user.emailAddresses[0].emailAddress);
-    // console.log('phoneNumber', user.phoneNumbers[0].phoneNumber);
-    // console.log('imageUrl', user.imageUrl);
 
 
     return (
@@ -27,7 +16,7 @@ function SigninSignout() {
             {/* btnSignin */}
             <SignedOut>
                 <button className='flex flex-col justify-center'>
-                    <span className='text-[9px]'>Hello, sign in</span>
+                    <span className='account text-[9px]'>Hello, sign in</span>
                     <span className='text-[12px] font-bold'>Account & Lists</span>
                 </button>
 
@@ -41,8 +30,8 @@ function SigninSignout() {
                             <img src='' />
                         </div>
                     </div> */}
-                    <div className="flex flex-col gap-2">
-                        <span className='text-[9px]'>Hello, {helloUser}</span>
+                    <div className="flex flex-col">
+                        <span className='account text-[9px]'>Hello, {user?.firstName || "Welcome"}</span>
                         <span className='text-[12px] font-bold'>Account & Lists</span>
                     </div>
                     <ChevronDown className='text-black w-3 ' />

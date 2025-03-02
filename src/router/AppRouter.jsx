@@ -8,16 +8,17 @@ import PublicLayout from '../layout/PublicLayout'
 import UserLayout from '../layout/UserLayout'
 import UserAccount from '../pages/userPages/UserAccount'
 import SellerLayout from '../layout/SellerLayout'
-import SellerRegister from '../pages/sellerPages/SellerRegister'
-import Merchant from '../pages/sellerPages/Merchant'
 import SellerDashboard from '../pages/sellerPages/SellerDashboard'
-import { UserProfile } from '@clerk/clerk-react'
 import AdminLayout from '../layout/AdminLayout'
 import Dashboard from '../pages/adminPages/Dashboard'
 import Management from '../pages/adminPages/Management'
 import Settings from '../pages/adminPages/Settings'
 import AddProduct from '../pages/sellerPages/sub-products/AddProduct'
 import ProtectRoutes from './ProtectRoutes'
+import AllProducts from '../pages/sellerPages/AllProducts'
+import UpdateProduct from '../pages/sellerPages/sub-products/UpdateProduct'
+import AllCustomers from '../pages/sellerPages/AllCustomers'
+import OrdersRevenue from '../pages/sellerPages/OrdersRevenue'
 
 
 ///// Manage router here : define each path for link to Page Components
@@ -28,11 +29,12 @@ function AppRouter() {
                 {/* PUBLIC */}
                 <Route path='/' element={<PublicLayout />}>
                     <Route index element={<HomePage />} />
-                    {/* No login --> Signin */}
+
+
                 </Route>
 
                 {/* USER */}
-                <Route path='user' element={<ProtectRoutes el={<UserLayout />} allows={["CUSTOMER", "SELLER"]} />}>
+                <Route path='user' element={<UserLayout />}>
                     <Route index element={<HomePage />} />
                     <Route path='update-account' element={<UserAccount />} />
                     <Route path='order-history' element={<OrderHistory />} />
@@ -42,8 +44,11 @@ function AppRouter() {
                 {/* SELLER */}
                 <Route path='seller-center' element={<ProtectRoutes el={<SellerLayout />} allows={["SELLER"]} />}>
                     <Route index element={<SellerDashboard />} />
-                    <Route path='merchant' element={<Merchant />} />
-                    <Route path='merchant/add-product' element={<AddProduct />} />
+                    <Route path='all-products' element={<AllProducts />} />
+                    <Route path='all-products/add-product' element={<AddProduct />} />
+                    <Route path='all-products/update-product/:productID' element={<UpdateProduct />} />
+                    <Route path='all-customers' element={<AllCustomers />} />
+                    <Route path='orders-revenue' element={<OrdersRevenue />} />
                 </Route>
 
                 {/* ADMIN */}
@@ -57,7 +62,7 @@ function AppRouter() {
 
                 {/* Not found page */}
                 <Route path='*' element={<NotFound />} />
-            </Routes>
+            </Routes >
         </>
     )
 }
