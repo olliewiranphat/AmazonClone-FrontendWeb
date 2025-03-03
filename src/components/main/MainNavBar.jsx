@@ -7,6 +7,7 @@ import OrderHisBtn from './orderhistory/OrderHisBtn'
 import MainSearchBar from './search-bar/MainSearchBar'
 import { useUser } from '@clerk/clerk-react'
 import CartBTN from './cart/CartBTN'
+import ReloadingLink from '../ReloadingLink'
 
 
 function MainNavBar() {
@@ -16,9 +17,9 @@ function MainNavBar() {
 
     return (
         <div className='bg-[#131921] h-[60px] text-white z-50 justify-between pr-2 flex fixed top-0 w-full items-center'>
-            <Link to='/' className='flex items-center justify-end h-full ' >
+            <ReloadingLink to='/' className='flex items-center justify-end h-full ' >
                 < img src={centric} alt="CENTRIC" className='h-[145px] ' />
-            </Link >
+            </ReloadingLink>
 
             <div className=' h-full flex items-center ' >
                 <button className='h-[80%] rounded-sm hover:bg-slate-400 hover:text-black hover:duration-300 px-2 flex flex-col items-center justify-center'>

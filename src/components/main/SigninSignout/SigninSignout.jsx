@@ -25,11 +25,6 @@ function SigninSignout() {
             <SignedIn>
 
                 <button className='flex justify-center'  >
-                    {/* <div className="avatar">
-                        <div className="w-10 rounded-full overflow-hidden">
-                            <img src='' />
-                        </div>
-                    </div> */}
                     <div className="flex flex-col">
                         <span className='account text-[9px]'>Hello, {user?.firstName || "Welcome"}</span>
                         <span className='text-[12px] font-bold'>Account & Lists</span>

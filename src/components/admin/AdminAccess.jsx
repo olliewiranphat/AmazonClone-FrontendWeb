@@ -1,11 +1,12 @@
 import { ShieldCheck } from 'lucide-react'
 import React from 'react'
+import ReloadingLink from '../ReloadingLink'
 
 function AdminAccess() {
     return (
-        <div className='account my-4 flex  justify-start gap-2'>
-            <ShieldCheck className='h-[20px]' />
-            <span className='ml-1 bottom-[2px] text-[14px]  cursor-pointer w-[120px] border-transparent hover:border-b-2  hover:border-black hover:duration-75 '>Centric Staff</span>
+        <div className='account flex justify-start gap-2 hover:bg-slate-400 hover:font-semibold hover:text-black w-full py-[10px] px-4 hover:duration-300 rounded-sm cursor-pointer'>
+            <ShieldCheck className='h-[18px]' />
+            <ReloadingLink to='/admin' className='ml-1 bottom-[2px] text-[12px] cursor-pointer'>Centric Staff</ReloadingLink>
         </div>
     )
 }

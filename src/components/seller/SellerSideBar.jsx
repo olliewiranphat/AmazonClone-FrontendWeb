@@ -6,11 +6,11 @@ import UserPicSB from '../user/UserPicSB';
 function SellerSideBar() {
 
     return (
-        < div className='flex-1 flex flex-col items-center bg-[#131921] text-white pr-5 h-full' >
+        < div className='flex-1 flex flex-col items-center bg-[#131921] text-white h-full' >
             {/* User Picture */}
             <UserPicSB />
 
-            <div className='w-full pl-4 mt-3  flex flex-col gap-1'>
+            <div className='w-full mt-3  flex flex-col gap-1'>
                 {/* Dashboard */}
                 <Link to='/seller-center' className='hover:bg-slate-400  hover:font-semibold hover:text-black w-full h-full p-1 pt-2 hover:duration-300 rounded-sm cursor-pointer'>
                     <div className='flex relative mb-2'>

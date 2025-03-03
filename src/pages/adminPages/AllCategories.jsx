@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { addCategory } from '../../api/category'
 
-function Settings() {
+function AllCategories() {
     const { register, handleSubmit } = useForm()
     const { getToken } = useAuth()
 
@@ -33,4 +33,4 @@ function Settings() {
     )
 }
 
-export default Settings
+export default AllCategories

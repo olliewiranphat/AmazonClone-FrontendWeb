@@ -14,9 +14,10 @@ function UserLayout() {
                 <SecondNavBar />
             </div>
             <div className='flex'>
-                <div className='w-[300px]'>
+                <div className='w-[200px]'>
                     <UserSideBar />
                 </div>
+
                 <div className='flex-1'>
                     <Outlet />
                 </div>

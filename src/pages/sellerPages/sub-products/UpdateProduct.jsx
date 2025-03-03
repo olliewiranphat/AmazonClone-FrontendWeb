@@ -1,24 +1,42 @@
 import { useParams } from 'react-router'
 import { Loader, Pencil } from 'lucide-react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
 import { useForm } from 'react-hook-form'
 import { resizeFile } from '../../../utils/resizer'
-import { updateImages } from '../../../api/images'
+import { addPDImgsCloud } from '../../../api/images'
 import { renderAlert } from '../../../utils/renderAlert'
 import useCategoryStore from '../../../store/CategoryStore'
+import useSellerStore from '../../../store/SellerStore'
+import axios from 'axios'
+import { updateProductID } from '../../../api/product'
 
 function UpdateProduct() {
+    const [checkValue, setCheckVaule] = useState(false)
     const { productID } = useParams()
+    const myProducts = useSellerStore(state => state.myProducts)
+    // console.log('myProducts', myProducts);
+    const thisProductID = myProducts.find((el) => el.productID == productID)
+    // console.log('thisProductID', thisProductID);
+    const { productImage } = thisProductID
+    // console.log('productImage', productImage);
+
     const allCategories = useCategoryStore(state => state.allCategories)
     const renderAllCategories = allCategories.map(el => {
         return (<option value={el.categoryID} key={el.categoryID}>{el.name}</option>)
     })
-    const { register, handleSubmit, reset } = useForm()
-    const [imageData, setImageData] = useState([])
+    const { register, handleSubmit, reset } = useForm({
+        defaultValues: {
+            productName: thisProductID.productName,
+            description: thisProductID.description,
+            categoryID: thisProductID.categoryID,
+            price: thisProductID.price,
+            stockQuantity: thisProductID.stockQuantity
+        }
+    })
+    const [imageData, setImageData] = useState(productImage)
     const [loading, setLoading] = useState(false)
     const usePencil = useRef()
-    const [showImage, setShowImage] = useState(false)
     const { getToken } = useAuth()
     const hdlUpdateImage = async (e) => {
         const token = await getToken()
@@ -28,19 +46,30 @@ function UpdateProduct() {
         let allImages = []
         for (let i = 0; i < files.length; i++) {
             await resizeFile(files[i]).then(async (resizedImage) => {
-                const response = await updateImages(token, resizedImage)
+                const response = await addPDImgsCloud(token, resizedImage)
                 console.log('response >>>>>', response);
                 setLoading(false)
                 allImages.push(response.data.results)
             })
         }
         setImageData([...imageData, ...allImages])
-        setShowImage(true)
+    }
+
+    ///// Send ImageID (public_id in DB) to delete image at Cloudinary :
+    const hdlDeleteImg = async (ID) => {
+        const token = await getToken()
+        // console.log('ID', ID);
+        const results = imageData.filter(el => el.public_id !== ID)
+        setImageData(results)
+        const delIMGCloud = await axios.post(`http://localhost:8080/seller-center/products/delete-images-cloud`, { public_id: ID }, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        console.log('delIMGCloud', delIMGCloud);
     }
     console.log('imageData', imageData);
     const renderImg = imageData.map((el, inx) => {
         return (<div key={inx} className="relative w-[150px] h-[150px]">
-            <img src={el.secure_url} className='w-full h-full object-cover' />
+            <img src={el.secure_url || el.productImage} className='w-full h-full object-cover' />
             <button onClick={() => hdlDeleteImg(el.public_id)} className='bg-[#a4a5a5] hover:bg-[#dddddd] hover:duration-300 hover:text-red-500 rounded-full w-7 h-7 flex items-center justify-center absolute right-[-10px] top-[-10px] text-xl text-white'>x</button>
         </div>)
     })
@@ -48,8 +77,50 @@ function UpdateProduct() {
         <span className='text-[30px] text-[#b1b2b2]'>+</span>
     </div>)
 
-    const hdlFormUpdateProduct = () => {
-        console.log("Update");
+    ///// Send imageData, value to UPDATE in DB
+    const hdlFormUpdateProduct = async (value) => {
+        if (imageData.length === 0) {
+            return renderAlert("Please select Product Images", "error")
+        }
+
+        for (const key in value) {
+            // console.log('key >>>>>', key);
+            if (!value[key]) {
+                if (key == "categoryID") {
+                    if (!value[key]) {
+                        return renderAlert("Please select Category", "error")
+                    }
+                } else if (key == "productEngName") {
+                    if (!value[key]) {
+                        return renderAlert("Please fill English name", "error")
+                    }
+                } else if (key == "productThaiName") {
+                    if (!value[key]) {
+                        return renderAlert("Please fill Thai name", "error")
+                    }
+                } else {
+                    if (!value[key]) {
+                        return renderAlert(`Please fill ${key[0].toUpperCase() + key.slice(1)}`)
+                    }
+                }
+
+            } else if (value[key]) {
+                setCheckVaule(true)
+            }
+        }
+        console.log('checkValue', checkValue);
+        if (checkValue === true && loading === false, imageData.length >= 1) {
+            const token = await getToken()
+            // console.log(token);
+            console.log('value >>>>>', value);
+            console.log('imageData >>>>>', imageData);
+            console.log('ProductID', thisProductID.productID);
+            const resUPDATEPD = await updateProductID(token, thisProductID.productID, { value, imageData })
+            console.log('resUPDATEPD', resUPDATEPD);
+
+
+            renderAlert("Update product success!", "success")
+        }
 
     }
 
@@ -62,14 +133,14 @@ function UpdateProduct() {
                 <Pencil onClick={() => usePencil.current.click()} className='text-gray-500  cursor-pointer absolute w-4 left-[96px] bottom-[-1px] border-transparent hover:border-b-2 hover:border-gray-500 hover:duration-75' />
                 {loading && <Loader className='animate-spin top-[-5px] left-[124px] absolute text-[#a4a5a5]' />}
             </div>
-            <div className='w-full h-[150px] flex gap-4'>
-                {showImage === false && noneImage}
-                {showImage === true && renderImg}
+            <div className='w-full h-[150px] flex gap-4 '>
+                {imageData.length > 0 && renderImg}
+                {imageData.length == 0 && noneImage}
             </div>
             {/* Product Detail */}
             <label className='flex flex-col gap-2 mt-9'>
                 <span className='text-[11px]'><span className='text-red-700 mr-1'>*</span>Product Name</span>
-                <input {...register("productName")} type="text" className='border border-[#a4a5a5] w-[90%] h-7 rounded-sm px-4 text-[10px]' placeholder='product name' />
+                <input  {...register("productName")} type="text" className='border border-[#a4a5a5] w-[90%] h-7 rounded-sm px-4 text-[10px]' placeholder='product name' />
             </label>
             <label className='flex flex-col gap-2 mt-7'>
                 <span className='text-[11px]'><span className='text-red-700 mr-1'>*</span>Description</span>

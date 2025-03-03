@@ -1,12 +1,12 @@
-import React, { Component, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Corosel from '../../components/main/Corosel'
-import useAuthStore from '../../store/UserStore'
-import axios from 'axios'
 import useCategoryStore from '../../store/CategoryStore'
 import useProductStore from '../../store/ProductStore'
-import { useUser } from '@clerk/clerk-react'
+import { useAuth, useUser } from '@clerk/clerk-react'
+import { Loader } from 'lucide-react'
 
 function HomePage() {
+
     const { user } = useUser()
     console.log('user', user);
 

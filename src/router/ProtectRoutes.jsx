@@ -2,6 +2,7 @@ import { SignInButton, useAuth, useUser } from '@clerk/clerk-react'
 import React from 'react'
 import { renderAlert } from '../utils/renderAlert';
 import { Link } from 'react-router';
+import { Loader, Loader2, Loader2Icon, LoaderCircle, LoaderCircleIcon, LoaderPinwheel, LucideLoader } from 'lucide-react';
 
 function ProtectRoutes({ el, allows }) {
 
@@ -15,7 +16,14 @@ function ProtectRoutes({ el, allows }) {
 
     const { isSignedIn, isLoaded } = useAuth()
     if (!isLoaded) {
-        return <h1>Loading...</h1>
+        return <Loader className='m-auto mt-[22%] animate-spin text-gray-400 font-semibold' />
+    }
+
+    if (!isSignedIn) {
+        return (
+            <SignInButton mode='madal'>
+            </SignInButton >
+        )
     }
 
     if (!allows.includes(role)) {
@@ -28,17 +36,8 @@ function ProtectRoutes({ el, allows }) {
     }
 
 
-    if (!isSignedIn) {
-        return (
-            <div>
-                <span>Access Denied!!</span>
-                <SignInButton mode='madal'>
-                    <span>Please Sigin in</span>
-                </SignInButton>
-            </div>
-        )
-    }
     return el
+
 }
 
 export default ProtectRoutes

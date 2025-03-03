@@ -1,7 +1,7 @@
 
 import { useAuth, useUser } from '@clerk/clerk-react';
 import React, { useState } from 'react'
-import { updateProfile } from '../../api/user';
+import { deleteUserAccount } from '../../api/user';
 import useAuthStore from '../../store/UserStore';
 import { renderAlert } from '../../utils/renderAlert';
 
@@ -11,19 +11,15 @@ import { renderAlert } from '../../utils/renderAlert';
 
 function UserAccount({ checkRole }) {
     ///// Zustand : 
-    const actionUpdateProflie = useAuthStore((state) => state.actionUpdateProflie) //Keep ROLE in Zustand to show State ROLE at UserSideBar
+    const actionUserAccount = useAuthStore((state) => state.actionUserAccount) //Keep ROLE in Zustand to show State ROLE at UserSideBar
     const userData = useAuthStore(state => state.userData)
-    console.log('userData', userData);
+    // console.log('userData', userData);
     const dateBirtday = new Date(userData?.birthday).toLocaleDateString('en-CA')
     ///// CLERK :
     const { user } = useUser()
+
     console.log('user', user);
-
-
-    // console.log(user?.firstName);
-
     // console.log('user', user.publicMetadata.role);
-    const { getToken } = useAuth()
 
 
     const [input, setInput] = useState({
@@ -31,18 +27,24 @@ function UserAccount({ checkRole }) {
         lastName: user?.lastName,
         email: user?.emailAddresses[0].emailAddress,
         phoneNumber: user?.phoneNumbers[0].phoneNumber,
+        address: userData?.address,
         birthDay: dateBirtday,
-        gender: userData?.gender,
+        gender: userData.gender,
         role: user?.publicMetadata.role,
         imageUrl: user?.imageUrl,
     })
     console.log('input', input);
 
-
     const hdlOnChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
 
+    const { getToken } = useAuth()
+    const hdlDELETEUser = async () => {
+        const token = await getToken()
+        const resDELETE = await deleteUserAccount(token)
+        console.log('resDELETE', resDELETE);
+    }
 
 
     // Submit Form : Fill all input already:
@@ -60,7 +62,7 @@ function UserAccount({ checkRole }) {
         // console.log('token', token);
         // console.log('input', input);
         try {               ///// Work when Submit Form
-            const response = await actionUpdateProflie(token, input) //at UserStore: function Update/Create New User in DB
+            const response = await actionUserAccount(token, input) //at UserStore: function Update/Create New User in DB
             // console.log('response', response);
             renderAlert("Update Seccuss", "success")
         } catch (error) {
@@ -76,46 +78,54 @@ function UserAccount({ checkRole }) {
             <span className='account font-bold text-[18px] pl-4'>Your Account</span>
             {/* Detail */}
             <div className='flex mt-7 mb-4 mx-auto w-[75%]'>
-                <form className='flex-1 flex flex-col gap-2 ' onSubmit={hdlSubmitForm}>
+                <form className='flex-1 flex flex-col gap-4' onSubmit={hdlSubmitForm}>
                     <span className='account text-2xl font-bold'>My Profile</span>
                     <span className='account text-sm text-gray-500'>Manage and protect your account</span>
-                    <div className='flex items-center  justify-between gap-2 my-2'>
+                    <div className='flex items-center justify-between gap-4 my-2'>
                         <div className='flex-1'>
-                            <label className='account text-xs flex flex-col gap-1'>
+                            <label className='account text-xs flex flex-col gap-2'>
                                 <span>Firstname</span>
-                                <input type="text" placeholder='Enter new firstname' className='bg-[#e6e6e6] h-8 w-full px-2 rounded-sm' name="firstName" value={input.firstName} onChange={hdlOnChange} />
+                                <input type="text" placeholder='Enter new firstname' className='border border-gray-300 bg-[#e6e6e6] h-8 w-[90%] px-2 rounded-md' name="firstName" value={input.firstName} onChange={hdlOnChange} />
+                            </label>
+                        </div>
+                        <div className='flex-1'>
+                            <label className='account text-xs flex flex-col gap-2'>
+                                <span>Lastname</span>
+                                <input type="text" placeholder='Enter new lastname' className='border border-gray-300 bg-[#e6e6e6] h-8 w-full px-2 rounded-md' name="lastName" value={input.lastName} onChange={hdlOnChange} />
+                            </label>
+                        </div>
+                    </div>
+                    <div className='my-2'>
+                        <label className='account text-xs flex flex-col gap-2'>
+                            <span>Address</span>
+                            <input type="text" placeholder='Enter your address' className='border border-gray-300 bg-[#e6e6e6] h-8 w-full px-2 rounded-md' name="address" value={input.address} onChange={hdlOnChange} />
+                        </label>
+                    </div>
+                    <div className='my-2'>
+                        <label className='account text-xs flex flex-col gap-2'>
+                            <span>Email</span>
+                            <input type="email" placeholder='Enter your email' className='border border-gray-300 bg-[#e6e6e6] h-8 w-full px-2 rounded-md' name="email" value={input.email} onChange={hdlOnChange} />
+                        </label>
+                    </div>
+                    <div className='flex items-center justify-between gap-4 my-2'>
+                        <div className='flex-1'>
+                            <label className='account text-xs flex flex-col gap-2'>
+                                <span>Phone number</span>
+                                <input type="text" placeholder='Enter your phone number' className='border border-gray-300 bg-[#e6e6e6] h-8 w-[90%] px-2 rounded-md' name="phoneNumber" value={input.phoneNumber} onChange={hdlOnChange} />
                             </label>
                         </div>
                         <div className='flex-1'>
                             <label className='account text-xs flex flex-col gap-1'>
-                                <span>Lastname</span>
-                                <input type="text" placeholder='Enter new lastname' className='bg-[#e6e6e6] h-8 w-full px-2 rounded-sm' name="lastName" value={input.lastName} onChange={hdlOnChange} />
+                                <span>Birthday</span>
+                                <input type="date" placeholder='Enter your birthday' className='border border-gray-300 bg-[#e6e6e6] h-8 w-[40%] px-2 rounded-md' name="birthDay" value={input.birthDay} onChange={hdlOnChange} />
                             </label>
                         </div>
+                    </div>
 
-                    </div>
-                    <div className='my-2'>
-                        <label className='account text-xs flex flex-col gap-1'>
-                            <span>Email</span>
-                            <input type="email" placeholder='Enter your email' className='bg-[#e6e6e6] h-8 w-full px-2 rounded-sm' name="email" value={input.email} onChange={hdlOnChange} />
-                        </label>
-                    </div>
-                    <div className='my-2'>
-                        <label className='account text-xs flex flex-col gap-1'>
-                            <span>Phone number</span>
-                            <input type="text" placeholder='Enter your phone number' className='bg-[#e6e6e6] h-8 w-full px-2 rounded-sm' name="phoneNumber" value={input.phoneNumber} onChange={hdlOnChange} />
-                        </label>
-                    </div>
-                    <div className='my-2'>
-                        <label className='account text-xs flex flex-col gap-1'>
-                            <span>Birthday</span>
-                            <input type="date" placeholder='Enter your birthday' className='bg-[#e6e6e6] h-8 w-full px-2 rounded-sm' name="birthDay" value={input.birthDay} onChange={hdlOnChange} />
-                        </label>
-                    </div>
                     <div className='my-3'>
-                        <label className='account text-xs flex flex-col'>
+                        <label className='account text-xs flex flex-col gap-2'>
                             <span>Gender</span>
-                            <div className='flex  w-full justify-evenly text-gray-700 mt-1'>
+                            <div className='flex w-full justify-start pl-16 gap-16 text-gray-700 mt-2'>
                                 <label className='flex gap-1 items-center '>
                                     <input type="radio" name="gender" value="male" onChange={hdlOnChange} />
                                     <span>Male</span>
@@ -141,7 +151,7 @@ function UserAccount({ checkRole }) {
                 </form>
             </div>
             <div className='flex items-center justify-end pr-28 mb-8 mt-[-25px]'>
-                <button className='text-sm bg-[#949494] p-2 px-3 hover:bg-[#bbbcbc] hover:duration-300 hover:text-red-600 hover:font-bold rounded-sm'>Delete Account</button>
+                <button onClick={hdlDELETEUser} className='text-sm bg-[#949494] p-2 px-3 hover:bg-[#bbbcbc] hover:duration-300 hover:text-red-600 hover:font-bold rounded-sm'>Delete Account</button>
             </div>
         </div>
 

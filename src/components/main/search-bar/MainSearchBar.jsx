@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import useCategoryStore from '../../../store/CategoryStore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { searchProducts } from '../../../api/product';
+import useProductStore from '../../../store/ProductStore';
 
 function MainSearchBar() {
-
+    const actionsearchProductsDB = useProductStore(state => state.actionsearchProductsDB)
     const navigate = useNavigate()
     const allCategories = useCategoryStore((state) => state.allCategories);
     // console.log('allCategories', allCategories);
@@ -19,10 +19,10 @@ function MainSearchBar() {
             console.log("HOME");
             navigate('/')
         }
-        const resSearchProducts = await searchProducts(categoryID, search)
-        console.log('resSearchProducts', resSearchProducts);
 
+        await actionsearchProductsDB(categoryID, search)
 
+        navigate('/search/related-products')
     }
 
 

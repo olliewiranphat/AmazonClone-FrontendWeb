@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
 import { useForm } from 'react-hook-form'
 import { resizeFile } from '../../../utils/resizer'
-import { addImages } from '../../../api/images'
+import { addPDImgsCloud } from '../../../api/images'
 import axios from 'axios'
 import { renderAlert } from '../../../utils/renderAlert'
 import useCategoryStore from '../../../store/CategoryStore'
@@ -22,10 +22,17 @@ function AddProduct() {
     const usePencil = useRef()
     const [showImage, setShowImage] = useState(false)
 
-
     const { getToken } = useAuth()
 
-    const { register, handleSubmit, reset } = useForm()
+    const { register, handleSubmit, reset } = useForm({
+        defaultValues: {
+            productName: "",
+            description: "",
+            categoryID: allCategories[0].categoryID,
+            price: "",
+            stockQuantity: ""
+        }
+    })
 
 
     const hdlAddImage = async (e) => {
@@ -36,8 +43,9 @@ function AddProduct() {
         let allImages = []
         for (let i = 0; i < files.length; i++) {
             await resizeFile(files[i]).then(async (resizedImage) => {
-                const response = await addImages(token, resizedImage)
+                const response = await addPDImgsCloud(token, resizedImage)
                 console.log('response >>>>>', response);
+
                 setLoading(false)
                 allImages.push(response.data.results)
             })
@@ -48,6 +56,8 @@ function AddProduct() {
     console.log('imageData', imageData);
 
     const hdlSubmitProduct = async (value) => {
+        console.log('value', value);
+
         if (imageData.length === 0) {
             return renderAlert("Please select Product Images", "error")
         }

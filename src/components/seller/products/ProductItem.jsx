@@ -4,9 +4,15 @@ import { Link } from 'react-router'
 import useCategoryStore from '../../../store/CategoryStore'
 import { useAuth } from '@clerk/clerk-react'
 import { deleteProductID } from '../../../api/product'
+import Swal from 'sweetalert2'
+import useSellerStore from '../../../store/SellerStore'
+import useAuthStore from '../../../store/UserStore'
 
 function ProductItem({ item }) {
     const { getToken } = useAuth()
+    const actionGetMyProducts = useSellerStore(state => state.actionGetMyProducts)
+    const userData = useAuthStore(state => state.userData)
+
     // console.log('item', item);
     const { categoryID, description, price, productID, productImage, productName, stockQuantity, userID } = item
     // console.log('productImage', productImage);
@@ -16,11 +22,18 @@ function ProductItem({ item }) {
     // console.log('cateItem', cateItem);
     const hdlDeletePDID = async (productID) => {
         console.log("Delete", productID);
-        alert("Are you sure?")
-        // const token = await getToken()
-        // const response = await deleteProductID(token, productID)
-        // console.log('response', response);
-        // / will update myProducts??at AllProducts.jsx
+        const { isConfirmed } = await Swal.fire({
+            text: "Are you sure?",
+            showCancelButton: true
+        })
+        console.log('isConfirmed', isConfirmed);
+        if (isConfirmed === true) {
+            const token = await getToken()
+            const response = await deleteProductID(token, productID)
+            console.log('response', response);
+            actionGetMyProducts(token, userData.userID)
+        }
+
     }
 
     return (

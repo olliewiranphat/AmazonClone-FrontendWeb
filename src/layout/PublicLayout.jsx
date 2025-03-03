@@ -13,12 +13,12 @@ function PublicLayout() {
             <div className='mt-[60px] flex flex-col'>
                 <SecondNavBar />
             </div>
-            <div className='mt-[-75px]'>
+            <div className='mt-[-75px] flex-1'>
                 <Outlet />
             </div>
-            <div className=''>
-                <Footer />
-            </div>
+
+            <Footer />
+
         </>
     )
 }

@@ -1,32 +1,8 @@
-import { SignedOut, SignInButton, SignOutButton, SignUpButton, useUser } from '@clerk/clerk-react'
-import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { SignedOut, SignInButton, SignUpButton } from '@clerk/clerk-react'
+import React from 'react'
 
 function ListSignin() {
-    // const { user } = useUser()
-    // console.log('user', user);
 
-    const [userData, setUserData] = useState({
-        firstName: "", ///????
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        role: "CUSTOMER",
-    })
-    // console.log('userData', userData);
-
-    const hdlClickSignin = () => {
-        console.log("Click!!! ");
-
-        setUserData({
-            ...userData,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            email: user?.emailAddresses[0]?.emailAddress,
-            phoneNumber: user?.phoneNumbers[0].phoneNumber,
-        })
-    }
-    // console.log('userData', userData);
     return (
         <SignedOut>
             <ul className='p-2 hidden mt-[110px] left-[-42px] bg-white w-[150px] absolute group-hover:block text-black'>
