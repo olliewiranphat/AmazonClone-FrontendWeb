@@ -11,8 +11,10 @@ function SearchRelatedProduct() {
     const categoryID = useProductStore(state => state.categoryID)
     // console.log('categoryID', categoryID);
     const allCategories = useCategoryStore(state => state.allCategories)
+    console.log('allCategories', allCategories);
+
     const searchCate = allCategories.find(el => el.categoryID == categoryID)
-    // console.log('searchCate', searchCate);
+    console.log('searchCate', searchCate);
     const searchWord = useProductStore(state => state.search)
     // console.log('searchWord', searchWord);
 
@@ -25,8 +27,8 @@ function SearchRelatedProduct() {
     return (
         <div className='h-full flex flex-col mt-[75px]'>
             <div className='p-2 flex justify-between text-[12px] account border border-b-[1px] border-gray-500' >
-                {searchProductsDB?.length === 1 && <span>1 result for {searchWord || searchCate.name} </span>}
-                {searchProductsDB?.length > 1 && <span>{searchProductsDB.length} results for {searchWord || searchCate.name} </span>}
+                {searchProductsDB?.length === 1 && <span>1 result for {searchWord || searchCate?.name} </span>}
+                {searchProductsDB?.length > 1 && <span>{searchProductsDB.length} results for {searchWord || searchCate?.name} </span>}
                 <select className='p-1 rounded-md text-[9px]'>
                     <option>Featured</option>
                     <option>Price: Low to High</option>

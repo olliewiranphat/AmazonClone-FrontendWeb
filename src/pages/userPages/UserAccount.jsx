@@ -1,49 +1,68 @@
 
 import { useAuth, useUser } from '@clerk/clerk-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { deleteUserAccount } from '../../api/user';
 import useAuthStore from '../../store/UserStore';
 import { renderAlert } from '../../utils/renderAlert';
+import Swal from 'sweetalert2';
 
 
 
 ///// userdata, token are at Clerk!! now
 
 function UserAccount({ checkRole }) {
+    const { getToken } = useAuth()
     ///// Zustand : 
+    const actionGetMyAccount = useAuthStore(state => state.actionGetMyAccount)
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = await getToken()
+            actionGetMyAccount(token)
+        }
+        fetchData()
+    }, [])
     const actionUserAccount = useAuthStore((state) => state.actionUserAccount) //Keep ROLE in Zustand to show State ROLE at UserSideBar
     const userData = useAuthStore(state => state.userData)
-    // console.log('userData', userData);
+    console.log('userData', userData);
     const dateBirtday = new Date(userData?.birthday).toLocaleDateString('en-CA')
     ///// CLERK :
     const { user } = useUser()
-
     console.log('user', user);
-    // console.log('user', user.publicMetadata.role);
+    // console.log('user.firstName', user.firstName);
+    console.log('ROLE', user?.publicMetadata.role);
 
 
     const [input, setInput] = useState({
-        firstName: user?.firstName,  // use User data from Clerk : initial value
-        lastName: user?.lastName,
-        email: user?.emailAddresses[0].emailAddress,
-        phoneNumber: user?.phoneNumbers[0].phoneNumber,
-        address: userData?.address,
+        firstName: user?.firstName || userData?.firstName,  // use User data from Clerk : initial value
+        lastName: user?.lastName || userData?.lastName,
+        email: user?.emailAddresses[0].emailAddress || userData?.email,
+        phoneNumber: user?.phoneNumbers[0].phoneNumber || userData?.phoneNumber,
+        address: userData?.address || userData?.address,
         birthDay: dateBirtday,
-        gender: userData.gender,
-        role: user?.publicMetadata.role,
-        imageUrl: user?.imageUrl,
+        gender: userData?.gender,
+        role: user?.publicMetadata.role || userData?.role,
+        imageUrl: user?.imageUrl || userData?.imageUrl,
     })
-    console.log('input', input);
+    // console.log('input', input);
 
     const hdlOnChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
 
-    const { getToken } = useAuth()
     const hdlDELETEUser = async () => {
-        const token = await getToken()
-        const resDELETE = await deleteUserAccount(token)
-        console.log('resDELETE', resDELETE);
+        const { isConfirmed } = await Swal.fire({
+            text: "Are you sure to delete?",
+            showCancelButton: true
+        })
+        console.log('isConfirmed', isConfirmed);
+        if (isConfirmed === true) {
+            const token = await getToken()
+            const resDELETE = await deleteUserAccount(token)
+            console.log('resDELETE', resDELETE);
+        }
+
+
+
     }
 
 
@@ -74,7 +93,7 @@ function UserAccount({ checkRole }) {
 
 
     return (
-        <div className='w-full p-4 flex-wrap '>
+        <div className='w-full p-4 flex-wrap flex flex-col'>
             <span className='account font-bold text-[18px] pl-4'>Your Account</span>
             {/* Detail */}
             <div className='flex mt-7 mb-4 mx-auto w-[75%]'>
@@ -142,7 +161,7 @@ function UserAccount({ checkRole }) {
                         </label>
                     </div>
                     {
-                        user?.publicMetadata.role !== "ADMIN" && (<select onChange={hdlOnChange} name="role" value={input.role} className='px-2 py-1 rounded-md'>
+                        userData?.role !== "ADMIN" && (<select onChange={hdlOnChange} name="role" value={input.role} className='px-2 py-1 rounded-md'>
                             <option>CUSTOMER</option>
                             <option>SELLER</option>
                         </select>)

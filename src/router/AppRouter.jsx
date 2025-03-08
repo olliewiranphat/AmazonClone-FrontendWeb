@@ -15,13 +15,14 @@ import AddProduct from '../pages/sellerPages/sub-products/AddProduct'
 import ProtectRoutes from './ProtectRoutes'
 import AllProducts from '../pages/sellerPages/AllProducts'
 import UpdateProduct from '../pages/sellerPages/sub-products/UpdateProduct'
-import AllCustomers from '../pages/sellerPages/AllCustomers'
 import OrdersRevenue from '../pages/sellerPages/OrdersRevenue'
 import SearchRelatedProduct from '../pages/pucblicPages/SearchRelatedProduct'
 import ProductDetail from '../pages/pucblicPages/ProductDetail'
 import Orderpayment from '../pages/userPages/Orderpayment'
 import AllCategories from '../pages/adminPages/AllCategories'
 import AllSellers from '../pages/adminPages/AllSellers'
+import Payment from '../pages/userPages/Payment'
+import PaymentComplete from '../pages/userPages/PaymentComplete'
 
 
 ///// Manage router here : define each path for link to Page Components
@@ -37,12 +38,15 @@ function AppRouter() {
                 </Route>
 
                 {/* USER */}
-                <Route path='user' element={<ProtectRoutes el={<UserLayout />} allows={["USER", "SELLER", "ADMIN"]} />}>
+                <Route path='user' element={<UserLayout />}>
                     <Route index element={<HomePage />} />
                     <Route path='update-account' element={<UserAccount />} />
                     <Route path='order-history' element={<OrderHistory />} />
                     <Route path='order/payment' element={<Orderpayment />} />
                     <Route path='cart' element={<Cart />} />
+                    {/* PAYMENT */}
+                    <Route path='payment' element={<Payment />} />
+                    <Route path='payment/complete/:session' element={<PaymentComplete />} />
                 </Route>
 
                 {/* SELLER */}
@@ -51,7 +55,6 @@ function AppRouter() {
                     <Route path='all-products' element={<AllProducts />} />
                     <Route path='all-products/add-product' element={<AddProduct />} />
                     <Route path='all-products/update-product/:productID' element={<UpdateProduct />} />
-                    <Route path='all-customers' element={<AllCustomers />} />
                     <Route path='orders-revenue' element={<OrdersRevenue />} />
                 </Route>
 
@@ -59,7 +62,6 @@ function AppRouter() {
                 <Route path='admin' element={<ProtectRoutes el={<AdminLayout />} allows={["ADMIN"]} />}>
                     <Route index element={<Dashboard />} />
                     <Route path='management/all-categories' element={<AllCategories />} />
-                    <Route path='management/all-customers' element={<AllCustomers />} />
                     <Route path='management/all-sellers' element={<AllSellers />} />
                 </Route>
 

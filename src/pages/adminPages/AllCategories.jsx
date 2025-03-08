@@ -1,34 +1,48 @@
+
 import { useAuth } from '@clerk/clerk-react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { addCategory } from '../../api/category'
+import useCategoryStore from '../../store/CategoryStore'
+import AddCategory from '../../components/admin/AddCategory'
+import { FilePenLine, FilePenLineIcon } from 'lucide-react'
+import CategoryItem from '../../components/admin/CategoryItem'
+import UpdateCategory from '../../components/admin/UpdateCategory'
 
 function AllCategories() {
-    const { register, handleSubmit } = useForm()
-    const { getToken } = useAuth()
+    const allCategories = useCategoryStore(state => state.allCategories)
+    const [showUpdate, setShowUpdate] = useState(false)
+    const [categoryID, setCategoryID] = useState("")
+    const hdlClickUpdate = (categoryID) => {
+        console.log('categoryID', categoryID);
+        setShowUpdate(!showUpdate)
+        setCategoryID(categoryID)
 
-    const createCategory = async (value) => {
-        console.log('value', value);
-        const token = await getToken()
-        console.log('token', token);
-        try {
-            const response = await addCategory(token, value)
-            console.log('response', response);
-
-        } catch (error) {
-            console.log(error);
-
-        }
     }
 
+
+
     return (
-        <div className='w-full p-4'>
-            <form onSubmit={handleSubmit(createCategory)} className='flex flex-col gap-2 w-[300px] mt-4 p-4 border rounded-md border-[#232f3e]'>
-                <span>Add new category</span>
-                <span className='text-sm'>Category Name</span>
-                <input type="text" placeholder='new category' {...register("name")} className='p-2 border border-black rounded-sm ' />
-                <button className='bg-[#131921] mx-auto px-4 py-2 my-3 rounded-sm text-white hover:bg-[#febd69] hover:text-black hover:duration-300'>Save</button>
-            </form>
+        <div className='w-full p-4 flex flex-col flex-wrap h-full gap-2'>
+            <span className='account font-bold text-[18px] pl-4'>All Categories</span>
+            <div className='w-full flex px-4 justify-center'>
+                <div className='w-[50%] mt-4 border border-gray-400 rounded-md p-4'>
+                    <div className='flex w-full text-[12px] font-semibold border-gray-400 border-b-[1px] pb-2'>
+                        <div className='w-[20%]'>ID</div>
+                        <div className='flex-1 ml-2'>Name</div>
+                        <div className='flex-1 text-center'>Update</div>
+                        <div className='flex-1 text-center'>Delete</div>
+                    </div>
+                    {
+                        allCategories.map(el => (<CategoryItem key={el.categoryID} el={el} hdlClickUpdate={hdlClickUpdate} />))
+                    }
+
+                </div>
+                <div className=' ml-7'>
+                    <AddCategory />
+
+                </div>
+            </div>
         </div>
     )
 }

@@ -2,16 +2,18 @@ import { Search } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import useCategoryStore from '../../../store/CategoryStore';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import useProductStore from '../../../store/ProductStore';
+import { useAuth } from '@clerk/clerk-react';
 
 function MainSearchBar() {
     const actionsearchProductsDB = useProductStore(state => state.actionsearchProductsDB)
     const navigate = useNavigate()
     const allCategories = useCategoryStore((state) => state.allCategories);
     // console.log('allCategories', allCategories);
-
-    const { register, handleSubmit, reset } = useForm()
+    const location = useLocation()
+    const { register, handleSubmit } = useForm()
+    const { isLoaded } = useAuth()
     const hdlSubFormSearch = async (value) => {
         console.log('value', value);
         const { categoryID, search } = value
@@ -21,8 +23,13 @@ function MainSearchBar() {
         }
 
         await actionsearchProductsDB(categoryID, search)
-
-        navigate('/search/related-products')
+        if (location.pathname !== '/search/related-products') {
+            window.location.href = '/search/related-products'
+            navigate('/search/related-products')
+            if (!isLoaded) {
+                return <Loader className='m-auto mt-[22%] animate-spin text-red-500 font-semibold' />
+            }
+        }
     }
 
 

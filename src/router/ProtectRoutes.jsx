@@ -10,7 +10,6 @@ function ProtectRoutes({ el, allows }) {
     // console.log('user', user);
 
     const role = user?.publicMetadata.role
-
     // console.log('role', role);
 
 

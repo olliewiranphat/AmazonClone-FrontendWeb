@@ -4,7 +4,6 @@ import SellerAccess from '../seller/SellerAccess';
 import AdminAccess from '../admin/AdminAccess';
 import useAuthStore from '../../store/UserStore';
 import UserPicSB from './UserPicSB';
-import { Link, useLocation } from 'react-router';
 import ReloadingLink from '../ReloadingLink';
 
 function UserSideBar() {

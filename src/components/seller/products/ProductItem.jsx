@@ -23,7 +23,7 @@ function ProductItem({ item }) {
     const hdlDeletePDID = async (productID) => {
         console.log("Delete", productID);
         const { isConfirmed } = await Swal.fire({
-            text: "Are you sure?",
+            text: "Are you sure to delete?",
             showCancelButton: true
         })
         console.log('isConfirmed', isConfirmed);

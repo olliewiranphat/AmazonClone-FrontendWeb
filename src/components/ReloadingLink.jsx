@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 
 function ReloadingLink({ to, children, ...props }) {
     const location = useLocation()
