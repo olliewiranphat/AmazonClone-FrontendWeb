@@ -4,6 +4,7 @@ import useCategoryStore from '../../store/CategoryStore'
 import useProductStore from '../../store/ProductStore'
 import { useAuth, useUser } from '@clerk/clerk-react'
 import { Loader } from 'lucide-react'
+import Carosel from '../../components/home/Carosel'
 
 function HomePage() {
 
@@ -70,7 +71,8 @@ function HomePage() {
                     <span className='text-[10px] text-[#2d68a3] cursor-pointer hover:text-black hover:duration-300 account mt-2'>Shop the laset from Home</span>
                 </div>
             </div>
-
+            {/* Carosel */}
+            <Carosel />
         </>
 
     )

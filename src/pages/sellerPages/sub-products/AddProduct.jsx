@@ -127,7 +127,7 @@ function AddProduct() {
 
     const renderImg = imageData.map((el, inx) => {
         return (<div key={inx} className="relative w-[150px] h-[150px]">
-            <img src={el.secure_url} className='w-full h-full object-contain' />
+            <img src={el.secure_url} className='w-full h-full object-cover' />
             <button onClick={() => hdlDeleteImg(el.public_id)} className='bg-[#a4a5a5] hover:bg-[#dddddd] hover:duration-300 hover:text-red-500 rounded-full w-7 h-7 flex items-center justify-center absolute right-[-10px] top-[-10px] text-xl text-white'>x</button>
         </div>)
     })

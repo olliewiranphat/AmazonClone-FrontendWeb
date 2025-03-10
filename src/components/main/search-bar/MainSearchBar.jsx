@@ -39,7 +39,7 @@ function MainSearchBar() {
             <form onSubmit={handleSubmit(hdlSubFormSearch)} className="overflow-hidden w-full h-[40px] rounded-sm relative flex items-center top-2">
                 <select {...register("categoryID")} className="bg-[#e3e6e6] account cursor-pointer w-[50px] h-full pl-2 text-black flex justify-center items-center text-[11px]">
                     <option value="">All</option> {/* เพิ่ม value="" ให้กับ option "All" */}
-                    {allCategories.map((cate) =>
+                    {allCategories?.map((cate) =>
                         <option value={cate.categoryID} key={cate.categoryID}>
                             {cate.name}
                         </option>

@@ -45,7 +45,7 @@ function SearchRelatedProduct() {
                         return (
                             <Link to={`/search/related-products/${el.productID}`} key={el.productID} className='w-[200px] overflow-hidden flex flex-col gap-3 mb-5'>
                                 <div className='w-[200px] h-[200px]'>
-                                    <img src={el.productImage[0].productImage} alt="product-image" className='object-cover w-full h-full rounded-md' />
+                                    <img src={el.productImage[0].productImage} alt="product-image" className='object-contain w-full h-full rounded-md' />
                                 </div>
                                 <span className='text-[14px]'>{el.productName}</span>
                                 <span className='text-xl font-semibold my-1'><sup className='text-[11px]'>$</sup> {el.price}</span>

@@ -11,19 +11,18 @@ function SigninSignout() {
 
 
     return (
+        <div className='relative group rounded-sm hover:bg-slate-400  hover:text-black hover:duration-300 p-2'>
 
-        <div className='relative group rounded-sm hover:bg-slate-400  hover:text-black hover:duration-300 p-2 flex flex-col justify-center'>
             {/* btnSignin */}
             <SignedOut>
                 <button className='flex flex-col justify-center'>
                     <span className='account text-[9px]'>Hello, sign in</span>
                     <span className='text-[12px] font-bold'>Account & Lists</span>
                 </button>
-
             </SignedOut>
+
             {/* btnSignout */}
             <SignedIn>
-
                 <button className='flex justify-center'  >
                     <div className="flex flex-col">
                         <span className='account text-[9px]'>Hello, {user?.firstName || "Welcome"}</span>
@@ -31,7 +30,6 @@ function SigninSignout() {
                     </div>
                     <ChevronDown className='text-black w-3 ' />
                 </button>
-
             </SignedIn>
 
             {/* ulList Sign in*/}
@@ -40,7 +38,6 @@ function SigninSignout() {
             <ListSignout />
 
         </div>
-
     )
 }
 

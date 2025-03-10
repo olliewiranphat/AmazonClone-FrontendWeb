@@ -1,7 +1,6 @@
 import React from 'react'
 import centric from '../../images/centriclogo.png'
-import { Link } from 'react-router'
-import { Globe, MapPin, ShoppingCart } from 'lucide-react'
+import { Globe, MapPin } from 'lucide-react'
 import SigninSignout from './SigninSignout/SigninSignout'
 import OrderHisBtn from './orderhistory/OrderHisBtn'
 import MainSearchBar from './search-bar/MainSearchBar'
@@ -20,7 +19,7 @@ function MainNavBar() {
             <ReloadingLink to='/' className='flex items-center justify-end h-full ' >
                 < img src={centric} alt="CENTRIC" className='h-[145px] ' />
             </ReloadingLink>
-
+            {/* Deliver to */}
             <div className=' h-full flex items-center ' >
                 <button className='h-[80%] rounded-sm hover:bg-slate-400 hover:text-black hover:duration-300 px-2 flex flex-col items-center justify-center'>
                     <span className='text-[9px] account'>Deliver to {user?.firstName || ""}</span>
