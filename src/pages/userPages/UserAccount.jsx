@@ -160,12 +160,18 @@ function UserAccount({ checkRole }) {
                             </div>
                         </label>
                     </div>
-                    {
+                    {/* {
                         userData?.role !== "ADMIN" && (<select onChange={hdlOnChange} name="role" value={input.role} className='px-2 py-1 rounded-md'>
                             <option>CUSTOMER</option>
                             <option>SELLER</option>
                         </select>)
-                    }
+                    } */}
+                    <select onChange={hdlOnChange} name="role" value={input.role} className='px-2 py-1 rounded-md'>
+                        <option>CUSTOMER</option>
+                        <option>SELLER</option>
+                        <option>ADMIN</option>
+                    </select>
+
                     <button className='mx-auto mt-8 px-4 py-2 my-3 rounded-sm transform transition hover:scale-125 bg-[#0a1421] text-white hover:bg-[#febd69] hover:text-black hover:duration-300'>Save</button>
                 </form>
             </div>
